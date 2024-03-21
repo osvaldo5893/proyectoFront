@@ -1,0 +1,121 @@
+<div class="grid">
+    <div class="col-8 col-offset-2 min-h-screen flex justify-content-center align-items-center">
+        <div [formGroup]="formRegistrar"
+            class="col border-1 surface-border  border-round p-5"
+            autocomplete="off"
+            style="background-color: rgba(0,0,0,0.2);">
+
+            <div class="mb-4">
+                <div class="text-900 text-xl font-bold mb-2"></div>
+                <span class=" flex justify-content-center text-blue-800 text-xl font-bold mb-2" style="margin-left: 2rem;">
+                    Registrarse: 
+                </span>
+            </div>
+            <div class="grid">
+                <div class="col-12 sm:col-12 md:col-12 lg:col-4">
+                    <span class="p-input-icon-left w-full  border-primary-600">
+                        <i class="pi pi-user"></i>
+                        <input [class]="'w-full'"
+                            formControlName="nombre"
+                            type="text"
+                            autocomplete="off"
+                            pInputText
+                            placeholder="Nombre"
+                            style="background-color: rgba(255, 255, 255,0.3); ">
+                        <br>
+    
+                    </span>
+    
+                </div>
+                <div class="col-12 sm:col-12 md:col-12 lg:col-4">
+                    <span class="p-input-icon-left w-full  border-primary-600">
+                        <input [class]="'w-full'"
+                            formControlName="apellidoP"
+                            type="text"
+                            autocomplete="off"
+                            pInputText
+                            placeholder="Apellido Paterno"
+                            style="background-color: rgba(255, 255, 255,0.3); ">
+                        <br>
+    
+                    </span>
+
+                </div>
+                <div class="col-12 sm:col-12 md:col-12 lg:col-4 mb-5">
+                    <span class="p-input-icon-left w-full  border-primary-600">
+
+                        <input [class]="'w-full'"
+                            formControlName="apellidoM"
+                            type="text"
+                            autocomplete="off"
+                            pInputText
+                            placeholder="Apellido Materno"
+                            style="background-color: rgba(255, 255, 255,0.3); ">
+                        <br>
+    
+                    </span>
+
+                </div>
+                <div class="col-12 sm:col-12 md:col-12 lg:col-4">
+                    <span class="p-input-icon-left w-full  border-primary-600">
+                        <i class="pi pi-envelope"></i>
+                        <input [class]="'w-full'"
+                            formControlName="email"
+                            type="email"
+                            autocomplete="off"
+                            pInputText
+                            placeholder="Email"
+                            style="background-color: rgba(255, 255, 255,0.3); ">
+                        <br>
+    
+                    </span>
+    
+                </div>
+                <div class="col-12 sm:col-12 md:col-12 lg:col-4">
+                    <span class="p-input-icon-left w-full  border-primary-600">
+                        <i class="pi pi-lock"></i>
+                        <input 
+                            type="password"
+                            pInputText
+                            autocomplete="off"
+                            formControlName="password"
+                            class="w-full"
+                            placeholder="Contraseña"
+                            style="background-color: rgba(8, 128, 207, 0.3); ">
+                    </span>
+    
+                </div>
+                <div class="col-12 sm:col-12 md:col-12 lg:col-4" >
+                    <p-dropdown
+                    dropdownIcon="pi pi-users"
+                    [options]="roles"
+                    [class]="'w-full'"
+                    [showClear]="true"
+                    placeholder="Rol"
+                    [style]="{'width': '100%'}" 
+                    [ngClass]="{'ng-invalid ng-dirty': formRegistrar.get('role')?.errors != null && formRegistrar.get('role')?.touched == true}"
+                    formControlName="role"
+                    >
+                    </p-dropdown>
+                </div>
+            </div>
+    
+            <div class="col-12"></div>
+            <div class="col-12 sm:col-12 md:col-4 md:col-offset-4  lg:col-4 ">
+                <button [disabled]="formRegistrar.invalid"
+                    (click)="onRegister()"
+                    pButton
+                    pRipple
+                    label="Register"
+                    class="w-full"
+                    style="background-color: rgba(28, 128, 207, 1); border: 1px solid"></button>
+
+            </div>
+            <span class="flex justify-content-end"> <a [routerLink]="['']">Ya tienes cuenta ?</a></span>
+        </div>
+    </div>
+</div>
+
+<p-toast
+  [baseZIndex]="99999"
+  key="tst"></p-toast>

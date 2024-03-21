@@ -1,0 +1,263 @@
+<div class="text-900 font-bold text-2xl mb-4 text-center">Room</div>
+
+<div class="card" style="padding-left: 1rem;">
+  <p-panel header=""
+    class="line-height-12 m-0">
+    <!-- INICIO DE INPUTS -->
+    <div class="row flex justify-content-end">
+        <div class="col-12 sm:col-12 md:col-4 lg:col-2 ">
+            <p-button icon="pi pi-plus" label="Nuevo Producto" (onClick)="openModal();nombre='Guardar Información';nombrebtn='Guardar'" class="w-full" ></p-button>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="cols">
+          <div class="card">
+            <p-table #dt1 [value]="productos" dataKey="idProducto" [rows]="50" [rowHover]="true" [rowsPerPageOptions]="[50,100,500,1000]"
+                styleClass="p-datatable-gridlines" [paginator]="true"
+                [globalFilterFields]="['nombreProducto','idProducto','descripcion']" responsiveLayout="scroll">
+                <ng-template pTemplate="caption">
+                    <div class="flex justify-content-between flex-column sm:flex-row">
+    
+                        <span class="p-input-icon-left mb-2">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" #filter (input)="onGlobalFilter(dt1, $event)" placeholder="Buscar"
+                                class="w-full" />
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>
+                            <div class="flex justify-content-center align-items-center">
+                                ID
+    
+                            </div>
+                        </th>
+                        <th>
+                            <div class="flex justify-content-center align-items-center">
+                                Nombre
+    
+                            </div>
+                        </th>
+                        <th>
+                            <div class="flex justify-content-center align-items-center">
+                                Categoría
+    
+                            </div>
+                        </th>
+                        <th>
+                            <div class="flex justify-content-center align-items-center">
+                                Descripción
+    
+                            </div>
+                        </th>
+                        <th>
+                            <div class="flex justify-content-center align-items-center">
+                                Estatus
+    
+                            </div>
+                        </th>
+                        <th>
+                            <div class="flex justify-content-center align-items-center">
+                                Creado
+    
+                            </div>
+                        </th>
+
+                        <th>
+                            <div class="flex justify-content-center align-items-center">
+                                Acciones
+    
+                            </div>
+                        </th>
+
+    
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-item let-i="rowIndex">
+                    <tr >
+                        <td class="text-center">
+                            {{item.idProducto}}
+                          </td>  
+                        <td class="text-center">
+                          {{item.nombreProducto}}
+                        </td>
+                        <td class="text-center">
+                            {{ getNameCategoria(item.categoria) }}
+                        </td>
+    
+                        <td class="text-center">
+                            {{item.descripcion}}
+                        </td>
+    
+                        <td class="text-center">
+                            {{item.estatus == 1? 'Activo':'Inactivo'}}
+                        </td>
+    
+                        <td class="text-center">
+                            {{ dateFormat(item.createdAt) }}
+                        </td>
+                        <td class="text-center">
+                            <p-button icon="pi pi-pencil" (onClick)="editar(item)" severity="warning" ></p-button>
+                            &nbsp;
+                            <p-button icon="pi pi-trash" (onClick)="eliminar(item)" severity="danger"></p-button>
+                        </td>
+    
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td colspan="7">Sin Datos para Mostrar.</td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="loadingbody">
+                    <tr>
+                        <td colspan="7">Cargando Datos, espere...</td>
+                    </tr>
+    
+                </ng-template>
+                <ng-template pTemplate="paginatorleft" let-state>
+                    Mostrando {{(state.page  * state.rows) + 1}} a {{state.rows * (state.page + 1)}} de {{state.totalRecords}} registros.
+              </ng-template>
+            </p-table>
+          </div>
+        </div>
+    </div>   
+  </p-panel>
+  <br>
+
+</div>
+
+<p-dialog
+    [closable]="false"
+    [header]="nombre"
+    [(visible)]="display"
+    [modal]="true"
+    showEffect="fade"
+    [style]="{ 'width': '50%' }"
+    [breakpoints]="{ '960px': '75vw' }"
+>
+    <div class="p-fluid p-formgrid grid"  [formGroup]="formProducto">
+        <div class="field col-12 md:col-6">
+            <span class="p-float-label">
+                <input
+                    [ngClass]="{ 'ng-invalid ng-dirty': formProducto.get('nombreProducto')?.errors != null && formProducto.get('nombreProducto')?.touched == true }"
+                    type="text"
+                    pInputText
+                    formControlName="nombreProducto"
+                    
+                >
+                <label>Nombre del Producto</label>
+            </span>
+            <div *ngIf="formProducto.controls['nombreProducto'].hasError('required') && formProducto.controls['nombreProducto'].touched" class="error">
+                El Nombre es requerido!
+            </div>
+            <div *ngIf="formProducto.controls['nombreProducto'].hasError('pattern')" class="error">
+                Deben ser solo Letras!
+            </div>
+            <div *ngIf="formProducto.controls['nombreProducto'].hasError('maxlength')" class="error">
+                Maximo 50 caracteres
+            </div>
+        </div>
+        <div class="field col-12 md:col-6">
+            <span class="p-float-label">
+                <input
+                    [ngClass]="{ 'ng-invalid ng-dirty': formProducto.get('descripcion')?.errors != null && formProducto.get('descripcion')?.touched == true }"
+                    type="text"
+                    pInputText
+                    formControlName="descripcion"
+                    
+                >
+                <label>Descripcion</label>
+            </span>
+            <div *ngIf="formProducto.controls['descripcion'].hasError('required') && formProducto.controls['descripcion'].touched" class="error">
+                La descripción es requerida!
+            </div>
+            <div *ngIf="formProducto.controls['descripcion'].hasError('maxLengthExceeded')" class="error">
+                La descripción no puede exceder los 100 caracteres.
+            </div>
+            <div *ngIf="formProducto.controls['descripcion'].hasError('regexError')" class="error">
+            No se admiten caracteres especiales
+            </div>
+            
+        </div>
+
+
+
+        <div class="field col-12 md:col-6">
+            <p-dropdown
+                optionLabel="nombre" 
+                optionValue="id"
+                [ngClass]="{ 'ng-invalid ng-dirty': formProducto.get('estatus')?.errors != null && formProducto.get('estatus')?.touched == true }"
+                [options]="activo"
+                [showClear]="true"
+                placeholder="Estatus"
+                formControlName="estatus"
+            ></p-dropdown>
+            <div *ngIf="formProducto.controls['estatus'].hasError('required') && formProducto.controls['estatus'].touched" class="error">
+                El estatus es requerido!
+            </div>
+
+        </div>
+
+        <div class="field col-12 md:col-6">
+            <p-dropdown
+                optionLabel="nombre" 
+                optionValue="id"
+                [ngClass]="{ 'ng-invalid ng-dirty': formProducto.get('categoria')?.errors != null && formProducto.get('categoria')?.touched == true }"                
+                [options]="categorias"
+                [showClear]="true"
+                placeholder="Categoria"
+                class="ng-dirty ng-invalid"
+                formControlName="categoria"
+            ></p-dropdown>
+            <div *ngIf="formProducto.controls['categoria'].hasError('required') && formProducto.controls['categoria'].touched" class="error">
+                La categoria es requerida!
+            </div>
+
+        </div>
+
+        <div class="field col-12 md:col-12">
+            <span class="p-float-label">
+                <textarea id="float-input" rows="5" cols="30" pInputTextarea 
+                formControlName="comentarios"
+                [ngClass]="{ 'ng-invalid ng-dirty': formProducto.get('comentarios')?.errors != null && formProducto.get('comentarios')?.touched == true }"
+                ></textarea>
+                <label for="float-input">Comentarios</label>
+            </span>
+            <div *ngIf="formProducto.controls['comentarios'].hasError('required') && formProducto.controls['comentarios'].touched" class="error">
+                El comentario es requerido!
+            </div>
+            <div *ngIf="formProducto.controls['comentarios'].hasError('maxLengthExceededC')" class="error">
+                El comentario no puede exceder los 200 caracteres.
+            </div>
+
+            <div *ngIf="formProducto.controls['comentarios'].hasError('regexError')" class="error">
+                No se admiten caracteres especiales
+            </div>
+    
+
+        </div>
+
+
+    </div>
+    <br><br><br><br><br>
+    <ng-template pTemplate="footer">
+        <p-button 
+            label="Cerrar" 
+            loadingIcon="pi pi-bell" 
+            (onClick)="cerrarModal()"
+            labelLoad="Cerrado"
+            [outlined]="true"
+        ></p-button>
+
+        <p-button 
+            [disabled]="formProducto.invalid"
+            [label]="nombrebtn" 
+            [loading]="loading" loadingIcon="pi pi-bell" 
+            (onClick)="seleccionar()"
+            labelLoad="Guardando"
+        ></p-button>
+    </ng-template>
+</p-dialog>

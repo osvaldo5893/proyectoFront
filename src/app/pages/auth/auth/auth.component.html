@@ -1,0 +1,62 @@
+<div class="px-5 min-h-screen flex justify-content-center align-items-center">
+
+
+	<div [formGroup]="formLogin"
+		class="border-1 surface-border  border-round py-7 px-4 md:px-7 z-1"
+		autocomplete="off"
+		style="background-color: rgba(0,0,0,0.2);">
+
+		<div class="mb-4">
+			<div class="text-900 text-xl font-bold mb-2"></div>
+			<span class=" flex justify-content-center text-blue-800 text-xl font-bold mb-2" style="margin-left: 2rem;">
+				Ingrese sus credenciales
+			</span>
+		</div>
+		<div class="flex flex-column">
+			<span class="p-input-icon-left w-full  border-primary-600">
+				<i class="pi pi-envelope"></i>
+				<input [class]="'w-full md:w-25rem'"
+					
+					formControlName="email"
+					type="email"
+					autocomplete="off"
+					pInputText
+					placeholder="Email"
+					style="background-color: rgba(255, 255, 255,0.3); ">
+				<br>
+
+			</span>
+
+      <br>
+
+			<span class="p-input-icon-left w-full  border-primary-600">
+				<i class="pi pi-lock"></i>
+				<input 
+					type="password"
+					pInputText
+					autocomplete="off"
+					formControlName="pass"
+					class="w-full md:w-25rem"
+					placeholder="Contraseña"
+					style="background-color: rgba(8, 128, 207, 0.3); ">
+			</span>
+			<br>
+			<button 
+				(click)="onSignIn()"
+				(keyup.enter)="onSignIn()"
+				pButton
+				pRipple
+				label="Log In"
+				class="w-full"
+				style="background-color: rgba(28, 128, 207, 1); border: 1px solid"></button>
+		</div>
+		<br>
+		<span class="flex justify-content-end"> <a [routerLink]="['register']">Registrar</a></span>
+
+
+	</div>
+</div>
+
+<p-toast
+  [baseZIndex]="99999"
+  key="tst"></p-toast>
